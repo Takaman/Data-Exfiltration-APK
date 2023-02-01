@@ -3,3 +3,10 @@
 
 ## Overview
 The application extracts data from the phone
+
+
+
+
+## Technologies used
+1. Android App Studio
+2. 
