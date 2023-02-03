@@ -11,6 +11,7 @@ public class DeviceScrape {
         deviceInfo.append("\n OS version: "+ System.getProperty("os.version")+ "(" + Build.VERSION.INCREMENTAL + ")");
         deviceInfo.append("\n OS API level:" + Build.VERSION.SDK_INT);
         deviceInfo.append("\n Device: "+ Build.DEVICE);
+        deviceInfo.append("\n ID: "+ Build.ID);
         deviceInfo.append("\n Brand+Manufacturer: " + Build.BRAND +" " +Build.MANUFACTURER);
         deviceInfo.append("\n Model (and Product): "+ Build.MODEL + " ("+ Build.PRODUCT+")");
 
