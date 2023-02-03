@@ -11,12 +11,14 @@ public class DeviceScrape {
     public static String getDeviceInfo(){
 
         StringBuilder deviceInfo = new StringBuilder();
-        deviceInfo.append("\n OS version: "+ System.getProperty("os.version")+ "(" + Build.VERSION.INCREMENTAL + ")");
-        deviceInfo.append("\n OS API level:" + Build.VERSION.SDK_INT);
-        deviceInfo.append("\n Device: "+ Build.DEVICE);
-        deviceInfo.append("\n ID: "+ Build.ID);
-        deviceInfo.append("\n Brand+Manufacturer: " + Build.BRAND +" " +Build.MANUFACTURER);
-        deviceInfo.append("\n Model (and Product): "+ Build.MODEL + " ("+ Build.PRODUCT+")");
+        deviceInfo.append("\nOS version: "+ System.getProperty("os.version")+ "(" + Build.VERSION.INCREMENTAL + ")");
+        deviceInfo.append("\nOS API level:" + Build.VERSION.SDK_INT);
+        deviceInfo.append("\nDevice: "+ Build.DEVICE);
+        deviceInfo.append("\nDevice ID: "+ Build.ID);
+        deviceInfo.append("\nBrand: " + Build.BRAND);
+        deviceInfo.append("\nManufacturer: " + Build.MANUFACTURER);
+        deviceInfo.append("\nModel: "+ Build.MODEL);
+        deviceInfo.append("\nProduct: "+ Build.PRODUCT);
 
         return deviceInfo.toString();
     }
