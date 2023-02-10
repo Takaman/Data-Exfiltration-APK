@@ -20,9 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--obfuscationdictionary "C:\Users\dylan\OneDrive\Documents\GitHub\2207Project\dic.txt"
--classobfuscationdictionary "C:\Users\dylan\OneDrive\Documents\GitHub\2207Project\dic.txt"
--packageobfuscationdictionary "C:\Users\dylan\OneDrive\Documents\GitHub\2207Project\dic.txt"
+-obfuscationdictionary "dic.txt"
+-classobfuscationdictionary "dic.txt"
+-packageobfuscationdictionary "dic.txt"
 
 -mergeinterfacesaggressively
 -overloadaggressively
