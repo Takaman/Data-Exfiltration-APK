@@ -44,11 +44,9 @@ public class CallLogScrape {
                 builder.append("Phone Number: " + phNumber +
                         "\nCall Type: " + dir +
                         "\nDate: " + callDayTime +
-                        "\nCall Duration: " + callDuration + "\n");
+                        "\nCall Duration: " + callDuration + "\n\n");
 
             }
-
-            builder.append("\n");
 
         }
 

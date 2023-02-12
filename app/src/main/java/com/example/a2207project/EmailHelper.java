@@ -48,7 +48,7 @@ public class EmailHelper {
             emailMessage.setText(message);
 
             Transport.send(emailMessage);
-            Log.d("Message","I think has beensent");
+            Log.d("Message","I think has been sent");
         } catch (AddressException e)
         {
             e.printStackTrace();
