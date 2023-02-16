@@ -17,6 +17,7 @@ public class EmailHelper {
     {
         new SendEmailTask().execute(recipient,subject,message);
     }
+
     private static class SendEmailTask extends AsyncTask<String, Void, Void>
     {
         @Override

