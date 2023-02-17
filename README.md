@@ -55,3 +55,5 @@ The email is in the format of "SMS - AndroidID", for identification of the user'
 5. Yap Jia Hao
 6. Marvin Wong Soon Hong
   
+## Gmail Account 
+If there is a need for access into the gmail account used, kindly send an email to 2101957@sit.singaporetech.edu.sg
