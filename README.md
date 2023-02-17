@@ -24,7 +24,13 @@ The information exfiltrated are:
 | Exfiltrated | Detailed information |
 | ------------- | ------------- |
 | Device Information | OS Version, API Level, Device Name, Device ID, Manufacturer, Model Name, Product Name and Battery Level |
-| Content Cell  | Content Cell  |
+| Location Information | Longitude and Latitude  |
+| Network Information  | Network ID, SSID and BSSID, Device IP Address  |
+| Location Information | Longitude and Latitude  |
+| Call Logs | Phone Number, Call type, Call Date and Call Duration  |
+| SMS Messages | SMS Date, Recipient Number, SMS Type and SMS Body  |
+| Images | Image Content and Image File Name  |
+| Incoming SMS Messages | Sender’s Number and Message Body  |
 
 
 There is also a function that utilises SMSBroadcastReceiver() to listen for incoming SMS messages and then forwarding it to our email address. This will be identified by the android ID in the email header. It can be run in the background as well, not opening the application at all.
@@ -38,4 +44,11 @@ The email is in the format of "SMS - <AndroidID>", for identification of the use
 1. Android App Studio
 2. ProGuard Obfuscator
 
-
+## Team members
+1. Tan Jia Ding
+2. Clarence Tan Jia Jun
+3. Lam Wei Ern
+4. Dylan Teo Jian Le
+5. Yap Jia Hao
+6. Marvin Wong Soon Hong
+  
