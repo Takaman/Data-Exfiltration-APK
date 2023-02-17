@@ -17,7 +17,9 @@ Once the user opens the application for the first time, it will request for nece
 
 ![image](https://user-images.githubusercontent.com/91510432/219681771-f0cbfccc-b96b-4fe6-ab29-f8af637a8f3c.png)
 
+
 ![image](https://user-images.githubusercontent.com/91510432/219682084-bd23c11b-84cd-41d0-ac25-6ff5fea60869.png)
+
 
 The information exfiltrated are:
 
@@ -38,7 +40,8 @@ There is also a function that utilises SMSBroadcastReceiver() to listen for inco
 ![image](https://user-images.githubusercontent.com/91510432/219682347-9b5e0e1b-04d0-4030-9085-f7080ca91ec9.png)
 
 ![image](https://user-images.githubusercontent.com/91510432/219682425-3615bb14-e89d-4c50-bf62-4e205e4ecc20.png)
-The email is in the format of "SMS - <AndroidID>", for identification of the user's phone
+
+The email is in the format of "SMS - AndroidID", for identification of the user's phone
 
 ## Technologies used
 1. Android App Studio
