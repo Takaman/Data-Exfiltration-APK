@@ -63,7 +63,7 @@ public class EmailPicHelper {
                 BodyPart messageBodyPart = new MimeBodyPart();
                 messageBodyPart.setText(message);
                 Multipart multipart = new MimeMultipart();
-                //multipart.addBodyPart(messageBodyPart);
+                multipart.addBodyPart(messageBodyPart);
 
                 for (File image : images) {
                     if (image.exists() && image.canRead()) {
